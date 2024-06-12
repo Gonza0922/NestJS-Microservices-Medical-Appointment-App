@@ -1,38 +1,40 @@
 import { Controller } from '@nestjs/common';
 import { MessagePattern, Payload } from '@nestjs/microservices';
 import { AppointmentsService } from './appointments.service';
-import { CreateAppointmentDto } from './dto/create-appointment.dto';
-import { UpdateAppointmentDto } from './dto/update-appointment.dto';
+import {
+  CreateAppointmentDto,
+  UpdateAppointmentDto,
+} from './dto/appointments.dto';
 
-@Controller()
+@Controller('appointments')
 export class AppointmentsController {
   constructor(private readonly appointmentsService: AppointmentsService) {}
 
-  @MessagePattern('createAppointment')
-  create(@Payload() createAppointmentDto: CreateAppointmentDto) {
-    return this.appointmentsService.create(createAppointmentDto);
+  @MessagePattern({ cmd: 'createAppointment' })
+  create(@Payload() createAppointment: CreateAppointmentDto) {
+    return this.appointmentsService.create(createAppointment);
   }
 
-  @MessagePattern('findAllAppointments')
+  @MessagePattern({ cmd: 'findAllAppointments' })
   findAll() {
     return this.appointmentsService.findAll();
   }
 
-  @MessagePattern('findOneAppointment')
-  findOne(@Payload() id: number) {
-    return this.appointmentsService.findOne(id);
+  @MessagePattern({ cmd: 'findOneAppointment' })
+  findOne(@Payload() appointment_ID: number) {
+    return this.appointmentsService.findOne(appointment_ID);
   }
 
-  @MessagePattern('updateAppointment')
-  update(@Payload() updateAppointmentDto: UpdateAppointmentDto) {
+  @MessagePattern({ cmd: 'updateAppointment' })
+  update(@Payload() updateAppointment: UpdateAppointmentDto) {
     return this.appointmentsService.update(
-      updateAppointmentDto.id,
-      updateAppointmentDto,
+      updateAppointment.appointment_ID,
+      updateAppointment,
     );
   }
 
-  @MessagePattern('removeAppointment')
-  remove(@Payload() id: number) {
-    return this.appointmentsService.remove(id);
+  @MessagePattern({ cmd: 'removeAppointment' })
+  remove(@Payload() appointment_ID: number) {
+    return this.appointmentsService.remove(appointment_ID);
   }
 }

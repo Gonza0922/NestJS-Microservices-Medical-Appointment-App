@@ -1,10 +1,12 @@
 import { Injectable } from '@nestjs/common';
-import { CreateAppointmentDto } from './dto/create-appointment.dto';
-import { UpdateAppointmentDto } from './dto/update-appointment.dto';
+import {
+  CreateAppointmentDto,
+  UpdateAppointmentDto,
+} from './dto/appointments.dto';
 
 @Injectable()
 export class AppointmentsService {
-  create(createAppointmentDto: CreateAppointmentDto) {
+  create(createAppointment: CreateAppointmentDto) {
     return 'This action adds a new appointment';
   }
 
@@ -12,15 +14,15 @@ export class AppointmentsService {
     return `This action returns all appointments`;
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} appointment`;
+  findOne(appointment_ID: number) {
+    return `This action returns a #${appointment_ID} appointment`;
   }
 
-  update(id: number, updateAppointmentDto: UpdateAppointmentDto) {
-    return `This action updates a #${id} appointment`;
+  update(appointment_ID: number, updateAppointment: UpdateAppointmentDto) {
+    return `This action updates a #${appointment_ID} appointment`;
   }
 
-  remove(id: number) {
-    return `This action removes a #${id} appointment`;
+  remove(appointment_ID: number) {
+    return `This action removes a #${appointment_ID} appointment`;
   }
 }
