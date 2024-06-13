@@ -22,7 +22,7 @@ export class AppointmentsService {
     return this.appointmentsClient.send({ cmd: 'findAllAppointments' }, {});
   }
 
-  findOne(appointment_ID: number) {
+  findOne(appointment_ID: string) {
     return this.appointmentsClient.send(
       { cmd: 'findOneAppointment' },
       appointment_ID,
@@ -30,7 +30,7 @@ export class AppointmentsService {
   }
 
   updateAppointment(
-    appointment_ID: number,
+    appointment_ID: string,
     updateAppointment: UpdateAppointmentDto,
   ) {
     return this.appointmentsClient.send(
@@ -39,7 +39,7 @@ export class AppointmentsService {
     );
   }
 
-  removeAppointment(appointment_ID: number) {
+  removeAppointment(appointment_ID: string) {
     return this.appointmentsClient.send(
       { cmd: 'removeAppointment' },
       appointment_ID,

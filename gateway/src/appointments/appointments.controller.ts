@@ -29,15 +29,13 @@ export class AppointmentsController {
   }
 
   @Get('/get/:appointment_ID')
-  findOneAppointmentEndpoint(
-    @Param('appointment_ID', ParseIntPipe) appointment_ID: number,
-  ) {
+  findOneAppointmentEndpoint(@Param('appointment_ID') appointment_ID: string) {
     return this.appointmentsService.findOne(appointment_ID);
   }
 
   @Put('/put/:appointment_ID')
   updateAppointmentEndpoint(
-    @Param('appointment_ID', ParseIntPipe) appointment_ID: number,
+    @Param('appointment_ID') appointment_ID: string,
     @Body() updateAppointment: UpdateAppointmentDto,
   ) {
     return this.appointmentsService.updateAppointment(
@@ -47,9 +45,7 @@ export class AppointmentsController {
   }
 
   @Delete('/delete/:appointment_ID')
-  removeAppointmentEndpoint(
-    @Param('appointment_ID', ParseIntPipe) appointment_ID: number,
-  ) {
+  removeAppointmentEndpoint(@Param('appointment_ID') appointment_ID: string) {
     return this.appointmentsService.removeAppointment(appointment_ID);
   }
 }

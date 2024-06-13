@@ -14,18 +14,18 @@ export class UsersService {
     return this.usersClient.send({ cmd: 'findAllUsers' }, {});
   }
 
-  findOne(user_ID: number) {
+  findOne(user_ID: string) {
     return this.usersClient.send({ cmd: 'findOneUser' }, user_ID);
   }
 
-  updateUser(user_ID: number, updateUser: UpdateUserDto) {
+  updateUser(user_ID: string, updateUser: UpdateUserDto) {
     return this.usersClient.send(
       { cmd: 'updateUser' },
       { user_ID, ...updateUser },
     );
   }
 
-  removeUser(user_ID: number) {
+  removeUser(user_ID: string) {
     return this.usersClient.send({ cmd: 'removeUser' }, user_ID);
   }
 }

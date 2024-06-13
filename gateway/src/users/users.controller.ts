@@ -4,7 +4,6 @@ import {
   Delete,
   Get,
   Param,
-  ParseIntPipe,
   Post,
   Put,
 } from '@nestjs/common';
@@ -26,20 +25,20 @@ export class UsersController {
   }
 
   @Get('/get/:user_ID')
-  findOneUserEndpoint(@Param('user_ID', ParseIntPipe) user_ID: number) {
+  findOneUserEndpoint(@Param('user_ID') user_ID: string) {
     return this.usersService.findOne(user_ID);
   }
 
   @Put('/put/:user_ID')
   updateUserEndpoint(
-    @Param('user_ID', ParseIntPipe) user_ID: number,
+    @Param('user_ID') user_ID: string,
     @Body() updateUser: UpdateUserDto,
   ) {
     return this.usersService.updateUser(user_ID, updateUser);
   }
 
   @Delete('/delete/:user_ID')
-  removeUserEndpoint(@Param('user_ID', ParseIntPipe) user_ID: number) {
+  removeUserEndpoint(@Param('user_ID') user_ID: string) {
     return this.usersService.removeUser(user_ID);
   }
 }

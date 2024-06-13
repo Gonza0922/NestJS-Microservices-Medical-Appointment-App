@@ -8,5 +8,5 @@ export class CreateAppointmentDto {
 }
 
 export class UpdateAppointmentDto extends PartialType(CreateAppointmentDto) {
-  appointment_ID: number;
+  appointment_ID: string;
 }
