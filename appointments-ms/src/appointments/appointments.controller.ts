@@ -21,7 +21,7 @@ export class AppointmentsController {
   }
 
   @MessagePattern({ cmd: 'findOneAppointment' })
-  findOne(@Payload() appointment_ID: number) {
+  findOne(@Payload() appointment_ID: string) {
     return this.appointmentsService.findOne(appointment_ID);
   }
 
@@ -34,7 +34,7 @@ export class AppointmentsController {
   }
 
   @MessagePattern({ cmd: 'removeAppointment' })
-  remove(@Payload() appointment_ID: number) {
+  remove(@Payload() appointment_ID: string) {
     return this.appointmentsService.remove(appointment_ID);
   }
 }

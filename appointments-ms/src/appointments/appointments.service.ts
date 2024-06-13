@@ -14,15 +14,15 @@ export class AppointmentsService {
     return `This action returns all appointments`;
   }
 
-  findOne(appointment_ID: number) {
+  findOne(appointment_ID: string) {
     return `This action returns a #${appointment_ID} appointment`;
   }
 
-  update(appointment_ID: number, updateAppointment: UpdateAppointmentDto) {
+  update(appointment_ID: string, updateAppointment: UpdateAppointmentDto) {
     return `This action updates a #${appointment_ID} appointment`;
   }
 
-  remove(appointment_ID: number) {
+  remove(appointment_ID: string) {
     return `This action removes a #${appointment_ID} appointment`;
   }
 }

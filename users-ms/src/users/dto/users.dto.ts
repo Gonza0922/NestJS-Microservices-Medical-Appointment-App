@@ -5,7 +5,7 @@ export class CreateUserDto {
 }
 
 export class UpdateUserDto {
-  user_ID: number;
+  user_ID: string;
   name: string;
   email: string;
 }

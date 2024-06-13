@@ -11,15 +11,15 @@ export class UsersService {
     return `This action returns all users`;
   }
 
-  findOne(user_ID: number) {
+  findOne(user_ID: string) {
     return `This action returns a #${user_ID} user`;
   }
 
-  update(user_ID: number, updateUserDto: UpdateUserDto) {
+  update(user_ID: string, updateUserDto: UpdateUserDto) {
     return `This action updates a #${user_ID} user`;
   }
 
-  remove(user_ID: number) {
+  remove(user_ID: string) {
     return `This action removes a #${user_ID} user`;
   }
 }

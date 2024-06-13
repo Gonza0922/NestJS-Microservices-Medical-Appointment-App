@@ -5,8 +5,6 @@ export type AppointmentDocument = HydratedDocument<Appointment>;
 
 @Schema()
 export class Appointment {
-  @Prop({ unique: true })
-  appointment_ID: number;
   @Prop()
   patient_ID: number;
   @Prop()
