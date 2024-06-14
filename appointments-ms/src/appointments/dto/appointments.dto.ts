@@ -1,18 +1,16 @@
-import { PartialType } from '@nestjs/mapped-types';
 import {
   IsNotEmpty,
-  IsNumber,
   IsOptional,
-  IsPositive,
   IsString,
+  Length,
   MinLength,
 } from 'class-validator';
 
 export class CreateAppointmentDto {
-  @IsNumber()
+  @IsString()
   @IsNotEmpty()
-  @IsPositive()
-  patient_ID: number;
+  @Length(24, 24, { message: 'patient_ID must be equal to 24 characters' })
+  patient_ID: string;
   @IsString()
   @IsNotEmpty()
   @MinLength(2)
@@ -26,12 +24,13 @@ export class CreateAppointmentDto {
 export class UpdateAppointmentDto {
   @IsString()
   @IsNotEmpty()
+  @Length(24, 24, { message: 'patient_ID must be equal to 24 characters' })
   appointment_ID: string;
   @IsOptional()
-  @IsNumber()
+  @IsString()
   @IsNotEmpty()
-  @IsPositive()
-  patient_ID: number;
+  @Length(24, 24, { message: 'patient_ID must be equal to 24 characters' })
+  patient_ID: string;
   @IsOptional()
   @IsString()
   @IsNotEmpty()
