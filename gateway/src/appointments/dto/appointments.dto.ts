@@ -2,6 +2,7 @@ import { PartialType } from '@nestjs/mapped-types';
 import {
   IsNotEmpty,
   IsNumber,
+  IsOptional,
   IsPositive,
   IsString,
   MinLength,
@@ -22,4 +23,20 @@ export class CreateAppointmentDto {
   reason: string;
 }
 
-export class UpdateAppointmentDto extends CreateAppointmentDto {}
+export class UpdateAppointmentDto extends CreateAppointmentDto {
+  @IsOptional()
+  @IsNumber()
+  @IsNotEmpty()
+  @IsPositive()
+  patient_ID: number;
+  @IsOptional()
+  @IsString()
+  @IsNotEmpty()
+  @MinLength(2)
+  doctorName: string;
+  @IsOptional()
+  @IsString()
+  @IsNotEmpty()
+  @MinLength(4)
+  reason: string;
+}
