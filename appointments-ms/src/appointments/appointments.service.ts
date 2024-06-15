@@ -6,6 +6,7 @@ import {
 import { InjectModel } from '@nestjs/mongoose';
 import { Appointment, AppointmentDocument } from './schemas/appointment.schema';
 import { Model } from 'mongoose';
+import axios from 'axios';
 
 @Injectable()
 export class AppointmentsService {
@@ -31,7 +32,16 @@ export class AppointmentsService {
       const appointments = await this.appointmentModel.find();
       if (!appointments)
         throw new HttpException('appointments not found', HttpStatus.NOT_FOUND);
-      return appointments;
+      const appointmentPromises = appointments.map(async (appointment) => {
+        const { data } = await axios.get(
+          `http://${process.env.HOST}/users/get/${appointment.patient_ID}`,
+        );
+        return {
+          ...appointment.toObject(),
+          patient_ID: data,
+        };
+      });
+      return await Promise.all(appointmentPromises);
     } catch (error) {
       throw new HttpException(error, HttpStatus.INTERNAL_SERVER_ERROR);
     }
@@ -43,7 +53,11 @@ export class AppointmentsService {
       const appointment = await this.appointmentModel.findById(appointment_ID);
       if (!appointment)
         throw new HttpException('appointment not found', HttpStatus.NOT_FOUND);
-      return appointment;
+      // return appointment;
+      const { data } = await axios.get(
+        `http://${process.env.HOST}/users/get/${appointment.patient_ID}`,
+      );
+      return { ...appointment.toObject(), patient_ID: data };
     } catch (error) {
       throw new HttpException(error, HttpStatus.INTERNAL_SERVER_ERROR);
     }
