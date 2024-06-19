@@ -8,17 +8,17 @@ export class AuthController {
   constructor(private readonly authService: AuthService) {}
 
   @MessagePattern({ cmd: 'registerUser' })
-  create(@Payload() registerUser: RegisterUserDto) {
+  register(@Payload() registerUser: RegisterUserDto) {
     return this.authService.registerUser(registerUser);
   }
 
   @MessagePattern({ cmd: 'loginUser' })
-  findAll(@Payload() loginUser: LoginUserDto) {
+  login(@Payload() loginUser: LoginUserDto) {
     return this.authService.loginUser(loginUser);
   }
 
   @MessagePattern({ cmd: 'logoutUser' })
-  findOne() {
+  logout() {
     return this.authService.logoutUser();
   }
 }
