@@ -4,7 +4,7 @@ import { LoginUserDto, RegisterUserDto } from './dto/auth.dto';
 
 @Injectable()
 export class AuthService {
-  constructor(@Inject('AUTH') private readonly authClient: ClientProxy) {}
+  constructor(@Inject('USERS') private readonly authClient: ClientProxy) {}
 
   registerUser(createUser: RegisterUserDto) {
     return this.authClient.send({ cmd: 'registerUser' }, createUser);
