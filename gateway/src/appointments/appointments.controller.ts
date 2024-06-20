@@ -6,13 +6,16 @@ import {
   Param,
   Post,
   Put,
+  UseGuards,
 } from '@nestjs/common';
 import { AppointmentsService } from './appointments.service';
 import {
   CreateAppointmentDto,
   UpdateAppointmentDto,
 } from './dto/appointments.dto';
+import { AuthGuard } from 'src/auth/auth.guard';
 
+@UseGuards(AuthGuard)
 @Controller('appointments')
 export class AppointmentsController {
   constructor(private readonly appointmentsService: AppointmentsService) {}
