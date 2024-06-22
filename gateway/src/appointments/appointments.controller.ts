@@ -14,7 +14,10 @@ import {
   UpdateAppointmentDto,
 } from './dto/appointments.dto';
 import { AuthGuard } from 'src/auth/auth.guard';
+import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
 
+@ApiTags('appointments')
+@ApiBearerAuth()
 @UseGuards(AuthGuard)
 @Controller('appointments')
 export class AppointmentsController {
