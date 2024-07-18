@@ -6,7 +6,7 @@ import { ConfigModule } from '@nestjs/config';
 @Module({
   imports: [
     ConfigModule.forRoot({ isGlobal: true }),
-    MongooseModule.forRoot(process.env.URL_DB, {
+    MongooseModule.forRoot(process.env.MONGO_URI, {
       dbName: 'appointments',
     }),
     AppointmentsModule,

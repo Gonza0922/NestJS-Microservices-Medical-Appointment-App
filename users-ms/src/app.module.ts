@@ -8,7 +8,7 @@ import { JwtModule } from '@nestjs/jwt';
 @Module({
   imports: [
     ConfigModule.forRoot({ isGlobal: true }),
-    MongooseModule.forRoot(process.env.URL_DB, {
+    MongooseModule.forRoot(process.env.MONGO_URI, {
       dbName: 'users',
     }),
     JwtModule.register({

@@ -34,7 +34,7 @@ export class AppointmentsService {
         throw new HttpException('appointments not found', HttpStatus.NOT_FOUND);
       const appointmentPromises = appointments.map(async (appointment) => {
         const { data } = await axios.get(
-          `http://${process.env.HOST}/users/get/${appointment.patient_ID}`,
+          `http://${process.env.HOST_PORT}/users/get/${appointment.patient_ID}`,
         );
         return {
           ...appointment.toObject(),
@@ -53,9 +53,8 @@ export class AppointmentsService {
       const appointment = await this.appointmentModel.findById(appointment_ID);
       if (!appointment)
         throw new HttpException('appointment not found', HttpStatus.NOT_FOUND);
-      // return appointment;
       const { data } = await axios.get(
-        `http://${process.env.HOST}/users/get/${appointment.patient_ID}`,
+        `http://${process.env.HOST_PORT}/users/get/${appointment.patient_ID}`,
       );
       return { ...appointment.toObject(), patient_ID: data };
     } catch (error) {

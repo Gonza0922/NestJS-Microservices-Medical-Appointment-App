@@ -10,7 +10,7 @@ import { UsersService } from 'src/users/users.service';
       {
         name: 'USERS',
         transport: Transport.TCP,
-        options: { port: 3001 },
+        options: { port: 3001, host: process.env.USERS_HOST },
       },
     ]),
   ],
