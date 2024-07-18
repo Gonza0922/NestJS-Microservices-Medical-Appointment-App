@@ -16,6 +16,8 @@ services:
       - USERS_HOST=users
     ports:
       - 3000:3000
+    volumes:
+      - ./gateway/src:/app/src
 
   users:
     build:
@@ -28,6 +30,8 @@ services:
       - mongo
     ports:
       - 3001:3001
+    volumes:
+      - ./users-ms/src:/app/src
 
   appointments:
     build:
@@ -41,6 +45,8 @@ services:
       - mongo
     ports:
       - 3002:3002
+    volumes:
+      - ./appointments-ms/src:/app/src
 
 volumes:
   mongo-data:
