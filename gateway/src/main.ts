@@ -2,6 +2,7 @@ import { NestFactory } from '@nestjs/core';
 import { AppModule } from './app.module';
 import { ValidationPipe } from '@nestjs/common';
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
+import { RcpExceptionFilter } from './common/rcp-exception.filter';
 
 //Gateway
 async function bootstrap() {
@@ -12,6 +13,8 @@ async function bootstrap() {
       forbidNonWhitelisted: true,
     }),
   );
+
+  app.useGlobalFilters(new RcpExceptionFilter());
 
   //Swagger
   const options = new DocumentBuilder()

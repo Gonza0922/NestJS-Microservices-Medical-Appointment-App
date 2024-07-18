@@ -1,20 +1,39 @@
 import { Inject, Injectable } from '@nestjs/common';
-import { ClientProxy } from '@nestjs/microservices';
+import { ClientProxy, RpcException } from '@nestjs/microservices';
 import { LoginUserDto, RegisterUserDto } from './dto/auth.dto';
+import { firstValueFrom } from 'rxjs';
 
 @Injectable()
 export class AuthService {
   constructor(@Inject('USERS') private readonly authClient: ClientProxy) {}
 
-  registerUser(createUser: RegisterUserDto) {
-    return this.authClient.send({ cmd: 'registerUser' }, createUser);
+  async registerUser(createUser: RegisterUserDto) {
+    try {
+      return await firstValueFrom(
+        this.authClient.send({ cmd: 'registerUser' }, createUser),
+      );
+    } catch (error) {
+      throw new RpcException(error);
+    }
   }
 
-  loginUser(loginUser: LoginUserDto) {
-    return this.authClient.send({ cmd: 'loginUser' }, loginUser);
+  async loginUser(loginUser: LoginUserDto) {
+    try {
+      return await firstValueFrom(
+        this.authClient.send({ cmd: 'loginUser' }, loginUser),
+      );
+    } catch (error) {
+      throw new RpcException(error);
+    }
   }
 
-  logoutUser() {
-    return this.authClient.send({ cmd: 'logoutUser' }, {});
+  async logoutUser() {
+    try {
+      return await firstValueFrom(
+        this.authClient.send({ cmd: 'logoutUser' }, {}),
+      );
+    } catch (error) {
+      throw new RpcException(error);
+    }
   }
 }

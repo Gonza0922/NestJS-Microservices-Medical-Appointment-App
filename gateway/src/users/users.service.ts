@@ -1,27 +1,52 @@
 import { Inject, Injectable } from '@nestjs/common';
-import { ClientProxy } from '@nestjs/microservices';
+import { ClientProxy, RpcException } from '@nestjs/microservices';
 import { UpdateUserDto } from './dto/users.dto';
+import { firstValueFrom } from 'rxjs';
 
 @Injectable()
 export class UsersService {
   constructor(@Inject('USERS') private readonly usersClient: ClientProxy) {}
 
-  findAll() {
-    return this.usersClient.send({ cmd: 'findAllUsers' }, {});
+  async findAll() {
+    try {
+      return await firstValueFrom(
+        this.usersClient.send({ cmd: 'findAllUsers' }, {}),
+      );
+    } catch (error) {
+      throw new RpcException(error);
+    }
   }
 
-  findOne(user_ID: string) {
-    return this.usersClient.send({ cmd: 'findOneUser' }, user_ID);
+  async findOne(user_ID: string) {
+    try {
+      return await firstValueFrom(
+        this.usersClient.send({ cmd: 'findOneUser' }, user_ID),
+      );
+    } catch (error) {
+      throw new RpcException(error);
+    }
   }
 
-  updateUser(user_ID: string, updateUser: UpdateUserDto) {
-    return this.usersClient.send(
-      { cmd: 'updateUser' },
-      { user_ID, ...updateUser },
-    );
+  async updateUser(user_ID: string, updateUser: UpdateUserDto) {
+    try {
+      return await firstValueFrom(
+        this.usersClient.send(
+          { cmd: 'updateUser' },
+          { user_ID, ...updateUser },
+        ),
+      );
+    } catch (error) {
+      throw new RpcException(error);
+    }
   }
 
-  removeUser(user_ID: string) {
-    return this.usersClient.send({ cmd: 'removeUser' }, user_ID);
+  async removeUser(user_ID: string) {
+    try {
+      return await firstValueFrom(
+        this.usersClient.send({ cmd: 'removeUser' }, user_ID),
+      );
+    } catch (error) {
+      throw new RpcException(error);
+    }
   }
 }
