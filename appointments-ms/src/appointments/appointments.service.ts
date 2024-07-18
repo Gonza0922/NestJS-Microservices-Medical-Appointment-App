@@ -1,4 +1,5 @@
-import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
+import { HttpStatus, Injectable } from '@nestjs/common';
+import { RpcException } from '@nestjs/microservices';
 import {
   CreateAppointmentDto,
   UpdateAppointmentDto,
@@ -18,11 +19,14 @@ export class AppointmentsService {
   // "/appointments"
   async create(createAppointment: CreateAppointmentDto) {
     try {
+      await axios.get(
+        `http://${process.env.HOST_PORT}/users/get/${createAppointment.patient_ID}`,
+      );
       const appointmentCreated =
         await this.appointmentModel.create(createAppointment);
       return await appointmentCreated.save();
     } catch (error) {
-      throw new HttpException(error, HttpStatus.INTERNAL_SERVER_ERROR);
+      throw new RpcException(error);
     }
   }
 
@@ -31,7 +35,10 @@ export class AppointmentsService {
     try {
       const appointments = await this.appointmentModel.find();
       if (!appointments)
-        throw new HttpException('appointments not found', HttpStatus.NOT_FOUND);
+        throw new RpcException({
+          message: 'Appointments not found',
+          status: HttpStatus.NOT_FOUND,
+        });
       const appointmentPromises = appointments.map(async (appointment) => {
         const { data } = await axios.get(
           `http://${process.env.HOST_PORT}/users/get/${appointment.patient_ID}`,
@@ -43,7 +50,7 @@ export class AppointmentsService {
       });
       return await Promise.all(appointmentPromises);
     } catch (error) {
-      throw new HttpException(error, HttpStatus.INTERNAL_SERVER_ERROR);
+      throw new RpcException(error);
     }
   }
 
@@ -52,13 +59,16 @@ export class AppointmentsService {
     try {
       const appointment = await this.appointmentModel.findById(appointment_ID);
       if (!appointment)
-        throw new HttpException('appointment not found', HttpStatus.NOT_FOUND);
+        throw new RpcException({
+          message: 'Appointment not found',
+          status: HttpStatus.NOT_FOUND,
+        });
       const { data } = await axios.get(
         `http://${process.env.HOST_PORT}/users/get/${appointment.patient_ID}`,
       );
       return { ...appointment.toObject(), patient_ID: data };
     } catch (error) {
-      throw new HttpException(error, HttpStatus.INTERNAL_SERVER_ERROR);
+      throw new RpcException(error);
     }
   }
 
@@ -74,10 +84,13 @@ export class AppointmentsService {
         { new: true },
       );
       if (!appointmentUpdated)
-        throw new HttpException('appointment not found', HttpStatus.NOT_FOUND);
+        throw new RpcException({
+          message: 'Appointment not found',
+          status: HttpStatus.NOT_FOUND,
+        });
       return appointmentUpdated;
     } catch (error) {
-      throw new HttpException(error, HttpStatus.INTERNAL_SERVER_ERROR);
+      throw new RpcException(error);
     }
   }
 
@@ -87,10 +100,13 @@ export class AppointmentsService {
       const appointmentDeleted =
         await this.appointmentModel.findByIdAndDelete(appointment_ID);
       if (!appointmentDeleted)
-        throw new HttpException('appointment not found', HttpStatus.NOT_FOUND);
+        throw new RpcException({
+          message: 'Appointment not found',
+          status: HttpStatus.NOT_FOUND,
+        });
       return `Appointment ${appointment_ID} deleted`;
     } catch (error) {
-      throw new HttpException(error, HttpStatus.INTERNAL_SERVER_ERROR);
+      throw new RpcException(error);
     }
   }
 }

@@ -1,4 +1,5 @@
-import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
+import { HttpStatus, Injectable } from '@nestjs/common';
+import { RpcException } from '@nestjs/microservices';
 import { UpdateUserDto } from './dto/users.dto';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
@@ -16,10 +17,13 @@ export class UsersService {
     try {
       const users = await this.userModel.find();
       if (!users)
-        throw new HttpException('users not found', HttpStatus.NOT_FOUND);
+        throw new RpcException({
+          message: 'Users not found',
+          status: HttpStatus.NOT_FOUND,
+        });
       return users;
     } catch (error) {
-      throw new HttpException(error, HttpStatus.INTERNAL_SERVER_ERROR);
+      throw new RpcException(error);
     }
   }
 
@@ -28,10 +32,13 @@ export class UsersService {
     try {
       const user = await this.userModel.findById(user_ID);
       if (!user)
-        throw new HttpException('user not found', HttpStatus.NOT_FOUND);
+        throw new RpcException({
+          message: 'User not found',
+          status: HttpStatus.NOT_FOUND,
+        });
       return user;
     } catch (error) {
-      throw new HttpException(error, HttpStatus.INTERNAL_SERVER_ERROR);
+      throw new RpcException(error);
     }
   }
 
@@ -44,10 +51,13 @@ export class UsersService {
         { new: true },
       );
       if (!userUpdated)
-        throw new HttpException('user not found', HttpStatus.NOT_FOUND);
+        throw new RpcException({
+          message: 'User not found',
+          status: HttpStatus.NOT_FOUND,
+        });
       return userUpdated;
     } catch (error) {
-      throw new HttpException(error, HttpStatus.INTERNAL_SERVER_ERROR);
+      throw new RpcException(error);
     }
   }
 
@@ -56,10 +66,13 @@ export class UsersService {
     try {
       const userDeleted = await this.userModel.findByIdAndDelete(user_ID);
       if (!userDeleted)
-        throw new HttpException('user not found', HttpStatus.NOT_FOUND);
+        throw new RpcException({
+          message: 'User not found',
+          status: HttpStatus.NOT_FOUND,
+        });
       return `User ${user_ID} deleted`;
     } catch (error) {
-      throw new HttpException(error, HttpStatus.INTERNAL_SERVER_ERROR);
+      throw new RpcException(error);
     }
   }
 }

@@ -1,4 +1,5 @@
-import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
+import { HttpStatus, Injectable } from '@nestjs/common';
+import { RpcException } from '@nestjs/microservices';
 import { LoginUserDto, RegisterUserDto } from './dto/auth.dto';
 import { InjectModel } from '@nestjs/mongoose';
 import { User, UserDocument } from 'src/users/schemas/user.schema';
@@ -20,7 +21,10 @@ export class AuthService {
       const { email, password } = registerUser;
       const findEmail = await this.userModel.findOne({ email });
       if (findEmail)
-        throw new HttpException('Email already exists', HttpStatus.BAD_REQUEST);
+        throw new RpcException({
+          message: 'Email already exists',
+          status: HttpStatus.BAD_REQUEST,
+        });
       const hashedPassword = await bcrypt.hash(password, 10);
       const userCreated = await this.userModel.create({
         ...registerUser,
@@ -32,7 +36,7 @@ export class AuthService {
       return { user: userSaved, token: userToken };
     } catch (error) {
       console.error(error);
-      throw new HttpException(error, HttpStatus.INTERNAL_SERVER_ERROR);
+      throw new RpcException(error);
     }
   }
 
@@ -42,16 +46,22 @@ export class AuthService {
       const { email, password } = loginUser;
       const findUser = await this.userModel.findOne({ email });
       if (!findUser)
-        throw new HttpException('User not found', HttpStatus.BAD_REQUEST);
+        throw new RpcException({
+          message: 'User not found',
+          status: HttpStatus.NOT_FOUND,
+        });
       const isMatch = await bcrypt.compare(password, findUser.password);
       if (!isMatch)
-        throw new HttpException('Incorrect Password', HttpStatus.BAD_REQUEST);
+        throw new RpcException({
+          message: 'Incorrect password',
+          status: HttpStatus.BAD_REQUEST,
+        });
       const payload = { user_ID: findUser._id };
       const UserToken = await this.jwtService.signAsync(payload);
       return { user: findUser, token: UserToken };
     } catch (error) {
       console.error(error);
-      throw new HttpException(error, HttpStatus.INTERNAL_SERVER_ERROR);
+      throw new RpcException(error);
     }
   }
 
@@ -61,7 +71,7 @@ export class AuthService {
       return { message: 'Disconnected' };
     } catch (error) {
       console.error(error);
-      throw new HttpException(error, HttpStatus.INTERNAL_SERVER_ERROR);
+      throw new RpcException(error);
     }
   }
 }
