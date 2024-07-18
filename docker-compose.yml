@@ -1,0 +1,46 @@
+services:
+  mongo:
+    image: mongo
+    ports:
+      - "27017:27017"
+    volumes:
+      - mongo-data:/data/db
+
+  gateway:
+    build:
+      context: ./gateway
+      dockerfile: Dockerfile
+    env_file: .env
+    environment:
+      - APPOINTMENTS_HOST=appointments
+      - USERS_HOST=users
+    ports:
+      - 3000:3000
+
+  users:
+    build:
+      context: ./users-ms
+      dockerfile: Dockerfile
+    env_file: .env
+    environment:
+      - MONGO_URI=${DOCKER_MONGO_URI}
+    depends_on:
+      - mongo
+    ports:
+      - 3001:3001
+
+  appointments:
+    build:
+      context: ./appointments-ms
+      dockerfile: Dockerfile
+    env_file: .env
+    environment:
+      - MONGO_URI=${DOCKER_MONGO_URI}
+      - HOST_PORT=gateway:3000
+    depends_on:
+      - mongo
+    ports:
+      - 3002:3002
+
+volumes:
+  mongo-data:
