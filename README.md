@@ -6,6 +6,7 @@ This medical appointment application is designed to facilitate the management of
 
 - NestJS: node.js framework
 - MongoDB: database
+- Docker: deploy
 
 ## Architecture
 
@@ -68,6 +69,29 @@ You need to have a Mongodb database running
 
   cd ../gateway
   npm run start
+  ```
+
+## Installation with Docker
+
+- Clone and open the repository
+
+  ```
+  git clone https://github.com/Gonza0922/NestJS-Microservices-Medical-Appointment-App
+  cd NestJS-Microservices-Medical-Appointment-App
+  ```
+
+- In the root, copy the ".env.example" file to ".env"
+
+  ```
+  cp .env.example .env
+  ```
+
+- Finally open the ".env" file and set the required variables.
+
+- Run docker-compose:
+
+  ```
+  docker compose up
   ```
 
 ## API Documentation
