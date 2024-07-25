@@ -5,6 +5,7 @@ import {
   CreateAppointmentDto,
   UpdateAppointmentDto,
 } from './dto/appointments.dto';
+import { PaginationDto } from 'src/common/pagination.dto';
 
 @Controller('appointments')
 export class AppointmentsController {
@@ -16,8 +17,8 @@ export class AppointmentsController {
   }
 
   @MessagePattern({ cmd: 'findAllAppointments' })
-  findAll() {
-    return this.appointmentsService.findAll();
+  findAll(@Payload() paginationDto: PaginationDto) {
+    return this.appointmentsService.findAll(paginationDto);
   }
 
   @MessagePattern({ cmd: 'findOneAppointment' })

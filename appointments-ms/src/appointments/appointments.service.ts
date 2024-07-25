@@ -8,6 +8,7 @@ import { InjectModel } from '@nestjs/mongoose';
 import { Appointment, AppointmentDocument } from './schemas/appointment.schema';
 import { Model } from 'mongoose';
 import axios from 'axios';
+import { PaginationDto } from 'src/common/pagination.dto';
 
 @Injectable()
 export class AppointmentsService {
@@ -31,9 +32,16 @@ export class AppointmentsService {
   }
 
   // "/appointments"
-  async findAll() {
+  async findAll(paginationDto: PaginationDto) {
     try {
-      const appointments = await this.appointmentModel.find();
+      const { limit, page } = paginationDto;
+      const offset = (page - 1) * limit;
+      const appointments = await this.appointmentModel
+        .find()
+        .skip(offset)
+        .limit(limit);
+      const totalPageData = await this.appointmentModel.countDocuments();
+      const totalPage = Math.ceil(totalPageData / limit);
       if (!appointments)
         throw new RpcException({
           message: 'Appointments not found',
@@ -48,7 +56,11 @@ export class AppointmentsService {
           patient_ID: data,
         };
       });
-      return await Promise.all(appointmentPromises);
+      const finalAppointments = await Promise.all(appointmentPromises);
+      return {
+        data: finalAppointments,
+        pagination: { page, limit, totalPage },
+      };
     } catch (error) {
       throw new RpcException(error);
     }

@@ -5,6 +5,7 @@ import {
   UpdateAppointmentDto,
 } from './dto/appointments.dto';
 import { firstValueFrom } from 'rxjs';
+import { PaginationDto } from 'src/common/pagination.dto';
 
 @Injectable()
 export class AppointmentsService {
@@ -25,10 +26,13 @@ export class AppointmentsService {
     }
   }
 
-  async findAll() {
+  async findAll(paginationDto: PaginationDto) {
     try {
       return await firstValueFrom(
-        this.appointmentsClient.send({ cmd: 'findAllAppointments' }, {}),
+        this.appointmentsClient.send(
+          { cmd: 'findAllAppointments' },
+          paginationDto,
+        ),
       );
     } catch (error) {
       throw new RpcException(error);

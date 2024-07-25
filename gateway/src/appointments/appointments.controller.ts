@@ -6,6 +6,7 @@ import {
   Param,
   Post,
   Put,
+  Query,
   UseGuards,
 } from '@nestjs/common';
 import { AppointmentsService } from './appointments.service';
@@ -15,6 +16,7 @@ import {
 } from './dto/appointments.dto';
 import { AuthGuard } from 'src/auth/auth.guard';
 import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
+import { PaginationDto } from 'src/common/pagination.dto';
 
 @ApiTags('appointments')
 @ApiBearerAuth()
@@ -29,8 +31,8 @@ export class AppointmentsController {
   }
 
   @Get()
-  findAllAppointmentsEndpoint() {
-    return this.appointmentsService.findAll();
+  findAllAppointmentsEndpoint(@Query() paginationDto: PaginationDto) {
+    return this.appointmentsService.findAll(paginationDto);
   }
 
   @Get('/get/:appointment_ID')
