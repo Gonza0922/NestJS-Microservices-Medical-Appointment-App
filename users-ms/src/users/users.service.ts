@@ -4,6 +4,7 @@ import { UpdateUserDto } from './dto/users.dto';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
 import { User, UserDocument } from './schemas/user.schema';
+import { PaginationDto } from 'src/common/pagination.dto';
 
 @Injectable()
 export class UsersService {
@@ -13,15 +14,19 @@ export class UsersService {
   ) {}
 
   // "/users"
-  async findAll() {
+  async findAll(paginationDto: PaginationDto) {
     try {
-      const users = await this.userModel.find();
+      const { limit, page } = paginationDto;
+      const offset = (page - 1) * limit;
+      const users = await this.userModel.find().skip(offset).limit(limit);
+      const totalPageData = await this.userModel.countDocuments();
+      const totalPage = Math.ceil(totalPageData / limit);
       if (!users)
         throw new RpcException({
           message: 'Users not found',
           status: HttpStatus.NOT_FOUND,
         });
-      return users;
+      return { data: users, pagination: { page, limit, totalPage } };
     } catch (error) {
       throw new RpcException(error);
     }

@@ -2,15 +2,16 @@ import { Inject, Injectable } from '@nestjs/common';
 import { ClientProxy, RpcException } from '@nestjs/microservices';
 import { UpdateUserDto } from './dto/users.dto';
 import { firstValueFrom } from 'rxjs';
+import { PaginationDto } from 'src/common/pagination.dto';
 
 @Injectable()
 export class UsersService {
   constructor(@Inject('USERS') private readonly usersClient: ClientProxy) {}
 
-  async findAll() {
+  async findAll(paginationDto: PaginationDto) {
     try {
       return await firstValueFrom(
-        this.usersClient.send({ cmd: 'findAllUsers' }, {}),
+        this.usersClient.send({ cmd: 'findAllUsers' }, paginationDto),
       );
     } catch (error) {
       throw new RpcException(error);
