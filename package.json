@@ -1,0 +1,14 @@
+{
+  "name": "medical-appointment-app",
+  "version": "1.0.0",
+  "description": "This medical appointment application is designed to facilitate the management of appointments between patients and doctors. It uses a microservices architecture to have high scalability and modular maintenance.",
+  "main": "index.js",
+  "scripts": {
+    "appointments-ms": "cd appointments-ms && npm run dev",
+    "gateway": "cd gateway && npm run dev",
+    "users-ms": "cd users-ms && npm run dev"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC"
+}
