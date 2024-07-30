@@ -48,10 +48,10 @@ You need to have a Mongodb database running
 - Install dependencies for each microservice:
 
   ```
-  cd user-microservice
+  cd users-ms
   npm install
 
-  cd ../appointment-microservice
+  cd ../appointments-ms
   npm install
 
   cd ../gateway
@@ -61,14 +61,15 @@ You need to have a Mongodb database running
 - Start the microservices and the gateway:
 
   ```
-  cd user-microservice
-  npm run start
+  npm run gateway
+  ```
 
-  cd ../appointment-microservice
-  npm run start
+  ```
+  npm run appointments-ms
+  ```
 
-  cd ../gateway
-  npm run start
+  ```
+  npm run users-ms
   ```
 
 ## Installation with Docker
