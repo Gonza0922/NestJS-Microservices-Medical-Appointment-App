@@ -9,17 +9,12 @@ import { PaginationDto } from 'src/common/pagination.dto';
 
 @Injectable()
 export class AppointmentsService {
-  constructor(
-    @Inject('APPOINTMENTS') private readonly appointmentsClient: ClientProxy,
-  ) {}
+  constructor(@Inject('NATS_SERVICE') private readonly client: ClientProxy) {}
 
   async createAppointment(createAppointment: CreateAppointmentDto) {
     try {
       return await firstValueFrom(
-        this.appointmentsClient.send(
-          { cmd: 'createAppointment' },
-          createAppointment,
-        ),
+        this.client.send({ cmd: 'createAppointment' }, createAppointment),
       );
     } catch (error) {
       throw new RpcException(error);
@@ -29,10 +24,7 @@ export class AppointmentsService {
   async findAll(paginationDto: PaginationDto) {
     try {
       return await firstValueFrom(
-        this.appointmentsClient.send(
-          { cmd: 'findAllAppointments' },
-          paginationDto,
-        ),
+        this.client.send({ cmd: 'findAllAppointments' }, paginationDto),
       );
     } catch (error) {
       throw new RpcException(error);
@@ -42,10 +34,7 @@ export class AppointmentsService {
   async findOne(appointment_ID: string) {
     try {
       return await firstValueFrom(
-        this.appointmentsClient.send(
-          { cmd: 'findOneAppointment' },
-          appointment_ID,
-        ),
+        this.client.send({ cmd: 'findOneAppointment' }, appointment_ID),
       );
     } catch (error) {
       throw new RpcException(error);
@@ -58,7 +47,7 @@ export class AppointmentsService {
   ) {
     try {
       return await firstValueFrom(
-        this.appointmentsClient.send(
+        this.client.send(
           { cmd: 'updateAppointment' },
           { appointment_ID, ...updateAppointment },
         ),
@@ -71,10 +60,7 @@ export class AppointmentsService {
   async removeAppointment(appointment_ID: string) {
     try {
       return await firstValueFrom(
-        this.appointmentsClient.send(
-          { cmd: 'removeAppointment' },
-          appointment_ID,
-        ),
+        this.client.send({ cmd: 'removeAppointment' }, appointment_ID),
       );
     } catch (error) {
       throw new RpcException(error);
