@@ -3,6 +3,7 @@ import { AuthService } from './auth.service';
 import { AuthController } from './auth.controller';
 import { ClientsModule, Transport } from '@nestjs/microservices';
 import { UsersService } from 'src/users/users.service';
+import { envs } from 'src/config/envs';
 
 @Module({
   imports: [
@@ -11,7 +12,7 @@ import { UsersService } from 'src/users/users.service';
         name: 'NATS_SERVICE',
         transport: Transport.NATS,
         options: {
-          servers: [process.env.NATS_SERVER || 'nats://localhost:4222'],
+          servers: [envs.natsServer],
         },
       },
     ]),

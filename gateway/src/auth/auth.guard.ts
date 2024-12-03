@@ -6,6 +6,7 @@ import {
 } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 import { RpcException } from '@nestjs/microservices';
+import { envs } from 'src/config/envs';
 
 @Injectable()
 export class AuthGuard implements CanActivate {
@@ -26,7 +27,7 @@ export class AuthGuard implements CanActivate {
       });
     try {
       const user = await this.jwtService.verifyAsync(token, {
-        secret: process.env.TOKEN_SECURE,
+        secret: envs.tokenSecure,
       });
       if (!user)
         throw new RpcException({

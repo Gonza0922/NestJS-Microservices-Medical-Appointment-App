@@ -4,13 +4,14 @@ import { UsersModule } from './users/users.module';
 import { AuthModule } from './auth/auth.module';
 import { JwtModule } from '@nestjs/jwt';
 import { ConfigModule } from '@nestjs/config';
+import { envs } from './config/envs';
 
 @Module({
   imports: [
     ConfigModule.forRoot({ isGlobal: true }),
     JwtModule.register({
       global: true,
-      secret: process.env.TOKEN_SECURE,
+      secret: envs.tokenSecure,
       signOptions: { expiresIn: '1d' },
     }),
     AppointmentsModule,

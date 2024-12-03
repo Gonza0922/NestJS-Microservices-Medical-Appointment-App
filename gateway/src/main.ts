@@ -3,6 +3,7 @@ import { AppModule } from './app.module';
 import { ValidationPipe } from '@nestjs/common';
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
 import { RcpExceptionFilter } from './common/rcp-exception.filter';
+import { envs } from './config/envs';
 
 //Gateway
 async function bootstrap() {
@@ -27,6 +28,9 @@ async function bootstrap() {
     .build();
   const document = SwaggerModule.createDocument(app, options);
   SwaggerModule.setup('api-docs', app, document);
+
+  console.log('el token secure del gateway es: ' + envs.tokenSecure);
+  console.log('el serve NATS del gateway es: ' + envs.natsServer);
 
   await app.listen(3000);
 }
