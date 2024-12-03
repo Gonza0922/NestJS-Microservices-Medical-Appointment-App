@@ -5,12 +5,12 @@ import { firstValueFrom } from 'rxjs';
 
 @Injectable()
 export class AuthService {
-  constructor(@Inject('USERS') private readonly authClient: ClientProxy) {}
+  constructor(@Inject('NATS_SERVICE') private readonly client: ClientProxy) {}
 
   async registerUser(createUser: RegisterUserDto) {
     try {
       return await firstValueFrom(
-        this.authClient.send({ cmd: 'registerUser' }, createUser),
+        this.client.send({ cmd: 'registerUser' }, createUser),
       );
     } catch (error) {
       throw new RpcException(error);
@@ -20,7 +20,7 @@ export class AuthService {
   async loginUser(loginUser: LoginUserDto) {
     try {
       return await firstValueFrom(
-        this.authClient.send({ cmd: 'loginUser' }, loginUser),
+        this.client.send({ cmd: 'loginUser' }, loginUser),
       );
     } catch (error) {
       throw new RpcException(error);
@@ -29,9 +29,7 @@ export class AuthService {
 
   async logoutUser() {
     try {
-      return await firstValueFrom(
-        this.authClient.send({ cmd: 'logoutUser' }, {}),
-      );
+      return await firstValueFrom(this.client.send({ cmd: 'logoutUser' }, {}));
     } catch (error) {
       throw new RpcException(error);
     }

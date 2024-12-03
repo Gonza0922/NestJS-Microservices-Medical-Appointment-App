@@ -6,12 +6,12 @@ import { PaginationDto } from 'src/common/pagination.dto';
 
 @Injectable()
 export class UsersService {
-  constructor(@Inject('USERS') private readonly usersClient: ClientProxy) {}
+  constructor(@Inject('NATS_SERVICE') private readonly client: ClientProxy) {}
 
   async findAll(paginationDto: PaginationDto) {
     try {
       return await firstValueFrom(
-        this.usersClient.send({ cmd: 'findAllUsers' }, paginationDto),
+        this.client.send({ cmd: 'findAllUsers' }, paginationDto),
       );
     } catch (error) {
       throw new RpcException(error);
@@ -21,7 +21,7 @@ export class UsersService {
   async findOne(user_ID: string) {
     try {
       return await firstValueFrom(
-        this.usersClient.send({ cmd: 'findOneUser' }, user_ID),
+        this.client.send({ cmd: 'findOneUser' }, user_ID),
       );
     } catch (error) {
       throw new RpcException(error);
@@ -31,10 +31,7 @@ export class UsersService {
   async updateUser(user_ID: string, updateUser: UpdateUserDto) {
     try {
       return await firstValueFrom(
-        this.usersClient.send(
-          { cmd: 'updateUser' },
-          { user_ID, ...updateUser },
-        ),
+        this.client.send({ cmd: 'updateUser' }, { user_ID, ...updateUser }),
       );
     } catch (error) {
       throw new RpcException(error);
@@ -44,7 +41,7 @@ export class UsersService {
   async removeUser(user_ID: string) {
     try {
       return await firstValueFrom(
-        this.usersClient.send({ cmd: 'removeUser' }, user_ID),
+        this.client.send({ cmd: 'removeUser' }, user_ID),
       );
     } catch (error) {
       throw new RpcException(error);
