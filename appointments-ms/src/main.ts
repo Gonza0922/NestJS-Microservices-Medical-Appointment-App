@@ -2,6 +2,7 @@ import { NestFactory } from '@nestjs/core';
 import { AppModule } from './app.module';
 import { MicroserviceOptions, Transport } from '@nestjs/microservices';
 import { ValidationPipe } from '@nestjs/common';
+import { envs } from './config/envs';
 
 //Appointments
 async function bootstrap() {
@@ -9,7 +10,7 @@ async function bootstrap() {
     AppModule,
     {
       transport: Transport.NATS,
-      options: { servers: [process.env.NATS_SERVER] }, // port 3002 con TCP
+      options: { servers: [envs.natsServer] }, // port 3002 con TCP
     },
   );
   app.useGlobalPipes(

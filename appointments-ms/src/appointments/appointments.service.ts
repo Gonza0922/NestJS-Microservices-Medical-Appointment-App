@@ -9,6 +9,7 @@ import { Appointment, AppointmentDocument } from './schemas/appointment.schema';
 import { Model } from 'mongoose';
 import axios from 'axios';
 import { PaginationDto } from 'src/common/pagination.dto';
+import { envs } from 'src/config/envs';
 
 @Injectable()
 export class AppointmentsService {
@@ -21,7 +22,7 @@ export class AppointmentsService {
   async create(createAppointment: CreateAppointmentDto) {
     try {
       await axios.get(
-        `http://${process.env.HOST_PORT}/users/get/${createAppointment.patient_ID}`,
+        `http://${envs.hostPort}/users/get/${createAppointment.patient_ID}`,
       );
       const appointmentCreated =
         await this.appointmentModel.create(createAppointment);
@@ -49,7 +50,7 @@ export class AppointmentsService {
         });
       const appointmentPromises = appointments.map(async (appointment) => {
         const { data } = await axios.get(
-          `http://${process.env.HOST_PORT}/users/get/${appointment.patient_ID}`,
+          `http://${envs.hostPort}/users/get/${appointment.patient_ID}`,
         );
         return {
           ...appointment.toObject(),
@@ -76,7 +77,7 @@ export class AppointmentsService {
           status: HttpStatus.NOT_FOUND,
         });
       const { data } = await axios.get(
-        `http://${process.env.HOST_PORT}/users/get/${appointment.patient_ID}`,
+        `http://${envs.hostPort}/users/get/${appointment.patient_ID}`,
       );
       return { ...appointment.toObject(), patient_ID: data };
     } catch (error) {
