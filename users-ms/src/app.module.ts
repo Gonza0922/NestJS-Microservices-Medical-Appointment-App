@@ -4,16 +4,17 @@ import { MongooseModule } from '@nestjs/mongoose';
 import { ConfigModule } from '@nestjs/config';
 import { AuthModule } from './auth/auth.module';
 import { JwtModule } from '@nestjs/jwt';
+import { envs } from './config/envs';
 
 @Module({
   imports: [
     ConfigModule.forRoot({ isGlobal: true }),
-    MongooseModule.forRoot(process.env.MONGO_URI, {
+    MongooseModule.forRoot(envs.mongoUri, {
       dbName: 'users',
     }),
     JwtModule.register({
       global: true,
-      secret: process.env.TOKEN_SECURE,
+      secret: envs.tokenSecure,
       signOptions: { expiresIn: '1d' },
     }),
     UsersModule,
