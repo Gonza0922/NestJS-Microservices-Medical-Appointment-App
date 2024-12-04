@@ -35,6 +35,7 @@ export class AuthGuard implements CanActivate {
           status: HttpStatus.UNAUTHORIZED,
         });
       request['user'] = user;
+      request['token'] = token;
       return true;
     } catch (error) {
       throw new RpcException(error);

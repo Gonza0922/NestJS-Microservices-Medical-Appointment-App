@@ -6,7 +6,7 @@ import {
 } from './dto/appointments.dto';
 import { InjectModel } from '@nestjs/mongoose';
 import { Appointment, AppointmentDocument } from './schemas/appointment.schema';
-import { Model } from 'mongoose';
+import { Model, Types } from 'mongoose';
 import axios from 'axios';
 import { PaginationDto } from 'src/common/pagination.dto';
 import { envs } from 'src/config/envs';
@@ -19,13 +19,22 @@ export class AppointmentsService {
   ) {}
 
   // "/appointments"
-  async create(createAppointment: CreateAppointmentDto) {
+  async create(payloadContent: {
+    createAppointment: CreateAppointmentDto;
+    token: string;
+  }) {
     try {
       await axios.get(
-        `http://${envs.hostPort}/users/get/${createAppointment.patient_ID}`,
+        `http://${envs.hostPort}/users/get/${payloadContent.createAppointment.patient_ID}`,
+        {
+          headers: {
+            Authorization: `Bearer ${payloadContent.token}`,
+          },
+        },
       );
-      const appointmentCreated =
-        await this.appointmentModel.create(createAppointment);
+      const appointmentCreated = await this.appointmentModel.create(
+        payloadContent.createAppointment,
+      );
       return await appointmentCreated.save();
     } catch (error) {
       throw new RpcException(error);
@@ -33,9 +42,9 @@ export class AppointmentsService {
   }
 
   // "/appointments"
-  async findAll(paginationDto: PaginationDto) {
+  async findAll(payloadContent: { pagination: PaginationDto; token: string }) {
     try {
-      const { limit, page } = paginationDto;
+      const { limit, page } = payloadContent.pagination;
       const offset = (page - 1) * limit;
       const appointments = await this.appointmentModel
         .find()
@@ -51,6 +60,11 @@ export class AppointmentsService {
       const appointmentPromises = appointments.map(async (appointment) => {
         const { data } = await axios.get(
           `http://${envs.hostPort}/users/get/${appointment.patient_ID}`,
+          {
+            headers: {
+              Authorization: `Bearer ${payloadContent.token}`,
+            },
+          },
         );
         return {
           ...appointment.toObject(),
@@ -68,9 +82,11 @@ export class AppointmentsService {
   }
 
   // "/appointments/get/:appointments"
-  async findOne(appointment_ID: string) {
+  async findOne(payloadContent: { appointment_ID: string; token: string }) {
     try {
-      const appointment = await this.appointmentModel.findById(appointment_ID);
+      const appointment = await this.appointmentModel.findById(
+        payloadContent.appointment_ID,
+      );
       if (!appointment)
         throw new RpcException({
           message: 'Appointment not found',
@@ -78,6 +94,11 @@ export class AppointmentsService {
         });
       const { data } = await axios.get(
         `http://${envs.hostPort}/users/get/${appointment.patient_ID}`,
+        {
+          headers: {
+            Authorization: `Bearer ${payloadContent.token}`,
+          },
+        },
       );
       return { ...appointment.toObject(), patient_ID: data };
     } catch (error) {

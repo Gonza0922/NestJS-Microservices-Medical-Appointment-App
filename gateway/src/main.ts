@@ -29,9 +29,6 @@ async function bootstrap() {
   const document = SwaggerModule.createDocument(app, options);
   SwaggerModule.setup('api-docs', app, document);
 
-  console.log('el token secure del gateway es: ' + envs.tokenSecure);
-  console.log('el serve NATS del gateway es: ' + envs.natsServer);
-
   await app.listen(3000);
 }
 bootstrap();

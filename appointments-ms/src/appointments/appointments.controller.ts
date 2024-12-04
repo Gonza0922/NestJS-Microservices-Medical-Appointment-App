@@ -12,18 +12,28 @@ export class AppointmentsController {
   constructor(private readonly appointmentsService: AppointmentsService) {}
 
   @MessagePattern({ cmd: 'createAppointment' })
-  create(@Payload() createAppointment: CreateAppointmentDto) {
-    return this.appointmentsService.create(createAppointment);
+  create(
+    @Payload()
+    payloadContent: {
+      createAppointment: CreateAppointmentDto;
+      token: string;
+    },
+  ) {
+    return this.appointmentsService.create(payloadContent);
   }
 
   @MessagePattern({ cmd: 'findAllAppointments' })
-  findAll(@Payload() paginationDto: PaginationDto) {
-    return this.appointmentsService.findAll(paginationDto);
+  findAll(
+    @Payload() payloadContent: { pagination: PaginationDto; token: string },
+  ) {
+    return this.appointmentsService.findAll(payloadContent);
   }
 
   @MessagePattern({ cmd: 'findOneAppointment' })
-  findOne(@Payload() appointment_ID: string) {
-    return this.appointmentsService.findOne(appointment_ID);
+  findOne(
+    @Payload() payloadContent: { appointment_ID: string; token: string },
+  ) {
+    return this.appointmentsService.findOne(payloadContent);
   }
 
   @MessagePattern({ cmd: 'updateAppointment' })

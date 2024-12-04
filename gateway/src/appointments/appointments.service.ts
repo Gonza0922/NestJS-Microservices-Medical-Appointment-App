@@ -1,4 +1,4 @@
-import { Inject, Injectable } from '@nestjs/common';
+import { Inject, Injectable, Request } from '@nestjs/common';
 import { ClientProxy, RpcException } from '@nestjs/microservices';
 import {
   CreateAppointmentDto,
@@ -11,30 +11,42 @@ import { PaginationDto } from 'src/common/pagination.dto';
 export class AppointmentsService {
   constructor(@Inject('NATS_SERVICE') private readonly client: ClientProxy) {}
 
-  async createAppointment(createAppointment: CreateAppointmentDto) {
+  async createAppointment(
+    createAppointment: CreateAppointmentDto,
+    token: string,
+  ) {
     try {
       return await firstValueFrom(
-        this.client.send({ cmd: 'createAppointment' }, createAppointment),
+        this.client.send(
+          { cmd: 'createAppointment' },
+          { createAppointment, token },
+        ),
       );
     } catch (error) {
       throw new RpcException(error);
     }
   }
 
-  async findAll(paginationDto: PaginationDto) {
+  async findAll(paginationDto: PaginationDto, token: string) {
     try {
       return await firstValueFrom(
-        this.client.send({ cmd: 'findAllAppointments' }, paginationDto),
+        this.client.send(
+          { cmd: 'findAllAppointments' },
+          { pagination: paginationDto, token },
+        ),
       );
     } catch (error) {
       throw new RpcException(error);
     }
   }
 
-  async findOne(appointment_ID: string) {
+  async findOne(appointment_ID: string, token: string) {
     try {
       return await firstValueFrom(
-        this.client.send({ cmd: 'findOneAppointment' }, appointment_ID),
+        this.client.send(
+          { cmd: 'findOneAppointment' },
+          { appointment_ID, token },
+        ),
       );
     } catch (error) {
       throw new RpcException(error);
