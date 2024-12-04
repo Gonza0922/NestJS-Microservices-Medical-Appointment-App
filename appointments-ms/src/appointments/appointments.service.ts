@@ -84,6 +84,11 @@ export class AppointmentsService {
   // "/appointments/get/:appointments"
   async findOne(payloadContent: { appointment_ID: string; token: string }) {
     try {
+      if (!Types.ObjectId.isValid(payloadContent.appointment_ID))
+        throw new RpcException({
+          message: 'Invalid appointment ID format',
+          status: HttpStatus.BAD_REQUEST,
+        });
       const appointment = await this.appointmentModel.findById(
         payloadContent.appointment_ID,
       );
@@ -112,6 +117,11 @@ export class AppointmentsService {
     updateAppointment: UpdateAppointmentDto,
   ) {
     try {
+      if (!Types.ObjectId.isValid(appointment_ID))
+        throw new RpcException({
+          message: 'Invalid appointment ID format',
+          status: HttpStatus.BAD_REQUEST,
+        });
       const appointmentUpdated = await this.appointmentModel.findByIdAndUpdate(
         appointment_ID,
         updateAppointment,
@@ -131,6 +141,11 @@ export class AppointmentsService {
   // "/appointments/delete/:appointments"
   async remove(appointment_ID: string) {
     try {
+      if (!Types.ObjectId.isValid(appointment_ID))
+        throw new RpcException({
+          message: 'Invalid appointment ID format',
+          status: HttpStatus.BAD_REQUEST,
+        });
       const appointmentDeleted =
         await this.appointmentModel.findByIdAndDelete(appointment_ID);
       if (!appointmentDeleted)
