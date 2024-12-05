@@ -2,7 +2,7 @@ import { Controller } from '@nestjs/common';
 import { MessagePattern, Payload } from '@nestjs/microservices';
 import { UsersService } from './users.service';
 import { UpdateUserDto } from './dto/users.dto';
-import { PaginationDto } from 'src/common/pagination.dto';
+import { PaginationDto } from './../common/pagination.dto';
 
 @Controller('users')
 export class UsersController {
