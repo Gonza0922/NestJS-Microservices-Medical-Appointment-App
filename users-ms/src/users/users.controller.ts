@@ -14,7 +14,7 @@ export class UsersController {
   }
 
   @MessagePattern({ cmd: 'findOneUser' })
-  findOne(@Payload() user_ID: string) {
+  findOne(@Payload() user_ID: number) {
     return this.usersService.findOne(user_ID);
   }
 
@@ -24,7 +24,7 @@ export class UsersController {
   }
 
   @MessagePattern({ cmd: 'removeUser' })
-  remove(@Payload() user_ID: string) {
+  remove(@Payload() user_ID: number) {
     return this.usersService.remove(user_ID);
   }
 }

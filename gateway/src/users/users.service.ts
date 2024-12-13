@@ -18,7 +18,7 @@ export class UsersService {
     }
   }
 
-  async findOne(user_ID: string) {
+  async findOne(user_ID: number) {
     try {
       return await firstValueFrom(
         this.client.send({ cmd: 'findOneUser' }, user_ID),
@@ -28,7 +28,7 @@ export class UsersService {
     }
   }
 
-  async updateUser(user_ID: string, updateUser: UpdateUserDto) {
+  async updateUser(user_ID: number, updateUser: UpdateUserDto) {
     try {
       return await firstValueFrom(
         this.client.send({ cmd: 'updateUser' }, { user_ID, ...updateUser }),
@@ -38,7 +38,7 @@ export class UsersService {
     }
   }
 
-  async removeUser(user_ID: string) {
+  async removeUser(user_ID: number) {
     try {
       return await firstValueFrom(
         this.client.send({ cmd: 'removeUser' }, user_ID),

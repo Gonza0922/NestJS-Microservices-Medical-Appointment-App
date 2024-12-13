@@ -1,22 +1,20 @@
 import { Module } from '@nestjs/common';
 import { UsersModule } from './users/users.module';
-import { MongooseModule } from '@nestjs/mongoose';
 import { ConfigModule } from '@nestjs/config';
 import { AuthModule } from './auth/auth.module';
 import { JwtModule } from '@nestjs/jwt';
 import { envs } from './config/envs';
+import { PrismaModule } from './prisma/prisma.module';
 
 @Module({
   imports: [
     ConfigModule.forRoot({ isGlobal: true }),
-    MongooseModule.forRoot(envs.mongoUri, {
-      dbName: 'users',
-    }),
     JwtModule.register({
       global: true,
       secret: envs.tokenSecure,
       signOptions: { expiresIn: '1d' },
     }),
+    PrismaModule,
     UsersModule,
     AuthModule,
   ],
